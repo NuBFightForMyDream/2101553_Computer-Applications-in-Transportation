@@ -1,0 +1,572 @@
+---
+title: "Exercise 1: Data Structure"
+author: "Pongsun B."
+date: "2025-08-14"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# **Vector**
+
+Vectors are the **most basic data structure in R**. These structures allow to **concatenate data** of the same type. It should be noted that there are several ways to create a vector in R, such as joining two or more vectors, using sequences, or using random data generators.
+
+A vector is just a **set of objects of the same type**. You can create logical, character, numeric, complex or even factor vectors, among others. It is worth to mention that the different terms of the vector are called components. In addition, you can check the class of a vector with the `class` function and the type of the elements with the `typeof` function.
+
+## **Create vector**
+
+Vectors in R can be created using the `c` function, that is used for **object concatenation**. You can save in memory a vector by assigning it a name with the `<-` operator.
+
+```         
+# Creating R vectors with 'c' function (Concatenate)
+x <- c(12, 6, 67) 
+y <- c("Name" , "Surname") # Vector of String
+y <- c('Name' , 'Surname') # Vector of String (Same as above)
+z <- c(TRUE , FALSE) # vector of Boolean
+```
+
+However, if you **mix the data** inside a vector **the components will be coerced**. (forced)
+
+Note : checking type of data by using `typeof(vector_name)`
+
+```{r Create vector, warning=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=80)}
+mix <- c(TRUE, "Correct", 8, 2.2) # Different Data Type
+
+# Display and check the class of the vector "mix"
+mix
+typeof(mix) # coerced to 'character' type
+
+# Note : Run some of command using "crop some code & cmd Enter"
+```
+
+## **Data types coercion**
+
+You can coerce data types in R with the functions starting with `as.`, summarized in the following table:
+
+| **Function** | **Coerced data type** |
+|:------------:|:---------------------:|
+|  as.numeric  |        Numeric        |
+|  as.integer  |        Integer        |
+|  as.double   |        Double         |
+| as.character |       Character       |
+|  as.logical  |        Boolean        |
+
+```{r Data types coercion, warning=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=80)}
+
+a <- 3
+typeof(a) # double
+
+# Coerce a double to integer
+a <- as.integer(a) # must save type to variable
+typeof(a) # integer (3L) L represents for integer only
+
+b <- TRUE
+# Coerce a logical value to numeric (0 and 1)
+b <- as.numeric(b)
+b # b is now 1
+typeof(b) # double (is in numeric type)
+
+c <- FALSE
+# Coerce a logical value to character string
+c <- as.character(c)
+c # "FALSE" as character
+typeof(c) # character type
+
+# Try to coerce two non-compatible data types (like a character string to numeric)
+r_coder <- as.double("R CODER")
+r_coder # NA = Not Applicable
+```
+
+## **Name vector**
+
+You can also name vector elements. For that purpose just choose a name for each component or just for some of them. In addition, if you have already created the vector you can use the `setNames` function.
+
+```{r Name vector, warning=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=80)}
+
+# Create a vector with 4 mangoes and 6 apples
+fruits <- c(mango = 4 , apple = 6) # we can assign name then value in vector
+fruits
+
+# Use the "setNames" function to name the vector "my_fruit"
+my_fruit <- c(4,6)
+fruit_name <- c('mango','apple')
+setNames(my_fruit , fruit_name) # use setNames function to set my_fruit vector with fruit_name
+
+## Note : Different Dimension will get NA for their name
+# Example
+a <- c(1,2,3)
+b <- c('A','B')
+setNames(a , b) # setNames a (value vector) with b (name vector)
+# see tht 3's name will be <NA> (Not Applicable)
+```
+
+## **Order vector**
+
+For **ordering or sorting** a vector you can call the `sort` function passing the vector as argument. By default, the function sorts in **ascending order**. You can also sort data in **descending order** setting the `decreasing` argument to `TRUE`. Hence, we can call the following:
+
+Alternatively, you can use brackets and order the vector components as an index making use of the `order` function.
+
+You can **reverse the order** of a vector in R calling the `rev` function.
+
+```{r Order vector, warning=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=80)}
+z <- c(12, 15, 3, 22)
+
+# Sort the vector "z" in ascending order with the "sort" function [Sort no need to assign] 
+sort(z , decreasing = FALSE)
+# Sort the vector "z" in descending order with the "sort" function 
+sort(z , decreasing = TRUE)
+
+# Note : Order = get pos from sorting
+
+# Sort the vector "z" in ascending order with the "order" function 
+order(z , decreasing = FALSE)
+# Sort the vector "z" in descending order with the "order" function 
+order(z , decreasing = TRUE)
+
+# Reverse the order of the vector "z"
+rev( z ) # reverse z
+```
+
+## **Compare two vectors**
+
+You can check if the elements of the first vector are contained in the second with `%in%`. You can also compare if all the elements of the first vector are in the second with the function `all`.
+
+```{r Compare two vectors, warning=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=80)}
+
+x <- c(1, 5)
+y <- c(4, 0, 1, 3)
+
+# Check if each element of the vector "x" is contained in the vector "y"
+x %in% y # 1 in y , but 5 not in y (will check all elements in x if in y)
+
+# Return the common element(s) between the vector "x" and "y"
+x[ x %in% y ] # use slicing index of vector
+
+# Check if all the elements of the vector "x" are in the vector "y" with the function "all"
+all(x %in% y) # FALSE
+
+```
+
+## **Access elements of vectors**
+
+### **Numeric index for accessing vector elements**
+
+In order to access the elements of a vector you can **indicate inside brackets the corresponding vector subindex** (positive integer). When you access to 'negative' positions it is understood that you want to access all positions less those positions.
+
+```{r Numeric index, warning=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=80)}
+
+my_month <- month.abb # abb is from abbreviated
+my_month
+
+# Access different data of "my_month"
+# First element
+my_month[ c(1) ]
+
+# Third and fourth element
+my_month[ c(3,4) ]
+# Fifth and seventh element
+my_month[ c(5,7) ]
+# Last element of vector
+my_month[ length(my_month) ]
+# Even months
+my_month[ c(2,4,6,8,10,12) ] 
+# Odd months
+my_month[ c(1,3,5,7,9,11) ]
+```
+
+### **Logical index for accessing vector elements**
+
+Other possibility is to **use a logical vector**. In this case, you will access to the positions with `TRUE` value.
+
+```{r Logical index, warning=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=80)}
+
+# The maximum monthly temperature of a spanish city in 2017.
+Spain_temp <- c(22.52, 18.70, 19.61, 22.79, 29.38, 30.19,
+                33.16, 36.97, 33.29, 28.98, 24.31, 22.43)
+
+setNames(Spain_temp, month.abb) # set names to Spain_temp vector with month.abb name
+
+# Months with maximum temperature greater than 30
+Spain_temp[ Spain_temp > 30 ] # get index which in condition
+
+# Months with maximum temperature lower than 20 OR greater than 35
+Spain_temp[ Spain_temp < 20 | Spain_temp > 35 ]
+```
+
+## **Delete elements from vector**
+
+If you want to delete only some specific values (elements) of a vector you can use the `-` sign indicating the indexes you don't want.
+
+```{r Delete elements from vector, warning=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=80)}
+
+my_capital <- c("London", "New York", "Paris", NA, "Bangkok")
+
+# Deleting 'London' with a "-" sign
+my_capital <- my_capital[-1] # - 1 for deleting index 1 (London)
+my_capital
+
+# Deleting 'London' with the "which" function
+# my_capital[ -which( my_capital == 'London') ] # index deleting element which in condition (my_captial == 'London') 
+
+# Remove NA
+my_capital <- my_capital[ ! is.na(my_capital) ] # not including element which is 'NA'
+my_capital
+
+```
+
+## Useful functions for creating vectors in R
+
+-   The `seq()` function is more general, taking the forms `seq(from, to)`, `seq(from, to, by= )`, and `seq(from, to, length.out= )` where the optional argument `by` specifies the interval between adjacent values and `length.out` gives the desired length of the result.
+
+-   The `rep()` function generates repeated sequences, replicating its first argument (which may be a vector) a given number of `times`, and individual elements can be repeated with each until an optional `length.out` is obtained.
+
+```{r Create vectors with functions, warning=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=80)}
+
+# Create the vector of 10 20 30 40 50 60 70 80 90 100 using the "by" argument
+numbers <- seq(10 , 100 , by = 10)
+numbers
+
+# Create the vector of 0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 using the "length.out" argument
+decimals <- seq(0 , 1 , length.out = 11) # 11 numbers including 0
+decimals
+
+# Create the vector of "female" "male" "female" "male" "female" "male"
+genders <- rep( c("female","male") , times = 3)
+genders
+
+# Create the vector of TRUE TRUE TRUE FALSE FALSE FALSE
+status <- c( rep("TRUE" , times = 3) , rep("FALSE" , times = 3) )
+status
+```
+
+# **Matrix**
+
+A matrix is a two-dimensional array of elements of the same type composed in a rectangular array of rows and columns. A matrix in R is a data structure for **storing objects of the same type**. If you want to store different objects inside an R data structure, you must use a **data frame** instead.
+
+## **Create matrix**
+
+The `matrix` function allows creating a matrix data structure in R programming language, passing a numeric, character or logical vector. You can set the number of columns or the number of rows with the `ncol` and `nrow` arguments, respectively. Also, you can specify if the matrix is ordered by rows or by columns with the `byrow` argument. **By default**, the function will order the input **by columns**.
+
+If you have data stored in vectors or in the columns of a data frame, you can use the `cbind` for column binding or `rbind` for row binding and the output will be of class `matrix`. Note that the output class can be checked with the `class` function and the class of the elements with the `typeof` function.
+
+Note you can use **any data type inside a matrix**, as long as they are **homogeneous**.
+
+```{r Create matrix, warning=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=80)}
+
+my_data <- 1:12
+
+# Create 2-column matrix ordered by column
+my_matrix_2col <- matrix(my_data , byrow = FALSE , ncol = 6) # ordered by column (not by row)
+my_matrix_2col
+
+# Create 4-row matrix ordered by column
+my_matrix_4row <- matrix(my_data , byrow = FALSE , nrow = 4) # ordered by column (not by row)
+my_matrix_4row
+
+# Create 3-row matrix ordered by row
+my_matrix_3row <- matrix(my_data , byrow = TRUE , nrow = 3) # order by row
+my_matrix_3row
+
+u <- c(2, 7, 3, 6, 1)
+v <- c(3, 7, 3, 5, 9)
+
+# column binding
+colbind <- cbind(u , v) # transposed automatically
+colbind
+
+# row binding
+rowbind <- rbind(u , v)
+rowbind
+
+# check the output class
+class(colbind) # "matrix" "array"
+class(rowbind) # "matrix" "array"
+
+# matrix of 'logical' and 'character' data type
+matrix(c(TRUE, TRUE, FALSE, TRUE), ncol = 2)
+matrix(c("red", "green", "orange", "black" , "cyan" , "magenta") , ncol = 2)
+
+```
+
+## **Add and delete column/row to matrix**
+
+As we show before, the `cbind` function can be used to create a matrix. However, the main use of the function is to **append columns to data structures**. Nonetheless, to remove columns you can use the `-` operator, indicating the **index of the column in the second argument** between brackets.
+
+Equivalently, the `rbind` function can be used to **append rows** to objects. You can delete rows the same way, but indicating the index in the first argument between brackets.
+
+The `rbind` function can also be used to stack or combine matrices.
+
+```{r Add and delete column/row to matrix, warning=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=80)}
+
+matA <- matrix(c(3, 1, 6, 1, 2, 9), ncol = 2)
+matA
+
+# Create matB by adding column c(6, 1, 7) and c(1, 6, 1) to matA
+matB <- cbind(matA , c(6,1,7) , c(1,6,1)) # automatically transposed
+matB
+
+# Remove first and third column of matB
+matB <- matB[ , -c(1,3)] # get all row , delete column 1&3
+matB
+
+# Remove second row of matA
+matA <- matA[ -c(2) , ] # delete row 2 , get all column
+matA
+
+matC <- matrix(c(2, 7, 1, 3, 6, 1), ncol = 2, byrow = T)
+matD <- matrix(c(3, 7, 6, 3, 5, 9), ncol = 2, byrow = T)
+
+# Stack matrices matC and matD vertically and horizontally
+rbind( matC , matD ) # horizontally 
+cbind( matC , matD ) # vertically
+```
+
+## **Add matrix row and column names**
+
+You can **assign names to the rows and columns** of a matrix with the `rownames` and `colnames` functions.
+
+With the `attributes` function, you can **access the dimension and the column and row labels** of your matrices. If you only want to return your **column and row names** you can use the `dimnames` function instead and access the elements of the list to get the row names or the column names.
+
+In case you are working with a named matrix and you want to get rid of the names, you can just **delete the row or column names** setting one to `NULL`, or use the `unname` function to delete all names.
+
+```{r Add matrix row and column names, warning=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=80)}
+
+my_mat <- matrix(1:8, nrow = 2, ncol = 4)
+my_mat
+
+# Label rows of my_mat with c("M", "F") and columns with the letters A to D
+rownames(my_mat) <- c("M" , "F")
+colnames(my_mat) <- LETTERS[1:4]
+
+# Name the row and column variables of my_mat as "Sex" and "Group", respectively
+dimnames(my_mat) <- list(Sex = rownames(my_mat) , Group = colnames(my_mat) )
+  # list is concatenating vector together
+  # or using this command : dimnames(my_mat) <- list(sex = c("M","F") , group = LETTERS[1:4])
+my_mat # print matrix with rowname & colname
+
+# See the structure of a matrix my_mat
+str(my_mat)
+
+# Remove column names of my_mat
+colnames(my_mat) <- NULL
+my_mat
+
+# Remove both row and column names of my_mat
+unname(my_mat) # remove row names & col names
+my_mat
+```
+
+# **Factor**
+
+A factor in R is a data structure used to represent a vector as **categorical data**. You can think about them as integer vectors in which each integer has an associated label. Therefore, the factor object takes a bounded number of different values called levels. Factors are very useful when working with character columns of data frames, for creating barplots and creating statistical summaries for categorical variables.
+
+The `factor` function allows you to create factors in R. In the following block we show the arguments of the function with a summarized description.
+
+```         
+Syntax
+factor(x = character(),         # Input character vector data
+       levels,                  # Input of unique x values (optional)
+       labels = levels,         # Output labels for the levels (optional)
+       exclude = NA,            # Values to be excluded from levels
+       ordered = is.ordered(x), # Whether the input levels are ordered as given or not
+       nmax = NA)               # Maximum number of levels
+```
+
+## **Convert character to factor**
+
+By default, converting a character vector to factor will **order the levels alphabetically**.
+
+```{r Convert character to factor, warning=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=80)}
+
+# You have a vector containing the week days when some event happened.
+event_day <- c("Friday", "Tuesday", "Thursday", 
+               "Monday", "Wednesday", "Monday", 
+               "Wednesday", "Monday", "Monday", 
+               "Wednesday", "Sunday", "Saturday") # 1D Matrix (vector) with 12 elements
+
+summary(event_day)
+
+# Convert your character vector to factor by preserving the order of the levels as appear on the input data
+char_to_fac <- factor(event_day , levels = unique(event_day)) # sort alphabetically with levels found in unique
+char_to_fac
+
+summary(char_to_fac) # same result as table(char_to_fac)
+
+# unique(event_day) # return elements that's not repeated respectively (เรียงตามที่เห็นก่อน)
+# sort(unique(event_day)) # sort alphabetically
+```
+
+## **Convert numeric to factor**
+
+Suppose you have registered the birth city of six individuals with the following codification:
+
+1: Bangkok 2: Chiangmai 3: Songkhla 4: Khonkaen.
+
+```{r Convert numeric to factor, warning=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=80)}
+
+# You have the following data stored in a numeric vector
+city <- c(3, 2, 1, 4, 3, 2)
+
+# Convert the data into factor and get it categorized for further analysis
+factor(city)
+
+# Change factor labels of the levels 
+cities <- c("Bangkok" , "Chiangmai" , "Songkhla" , "Khonkaen")
+cities_label <- factor(city , labels = cities)
+cities_label
+```
+
+## **Difference between levels and labels**
+
+It is common to get confused between **labels and levels arguments** of the R `factor` function. Consider the following vector with a unique group and create a factor from it with default arguments:
+
+Note : `Level` คือ ลำดับสมาชิกใน Vector ตัวนั้น (อะไรขึ้นก่อนหลัง)
+
+แต่ `Label` คือการเปลี่ยน element ตามสมาขิกใน vector `labels`
+
+```         
+gender <- c("female", "female", "female", "female")
+factor(gender)
+```
+
+```         
+Output
+female  female  female  female
+Levels: female
+```
+
+On the one hand, the `labels` argument allows you to modify the factor levels names. Hence, the `labels` argument it is related to **output**. Note that the length of the vector passed to the `labels` argument must be of the same length of the number of unique groups of the input vector.
+
+```         
+factor(gender, labels = c("f"))
+```
+
+```         
+Output
+f f f f
+Levels: f
+```
+
+On the other hand, the `levels` argument is related to **input**. This argument allows you to specify **how the levels are coded**. Moreover, this argument allows you to **add new levels** to the factor:
+
+```         
+factor(gender, levels = c("male", "female"))
+```
+
+```         
+Output
+female female female female
+Levels: male female
+```
+
+Note you have to specify at least the same names of the input vector groups, or the output wonâ€™t be as expected:
+
+```         
+factor(gender, levels = c("male", "f"))  # Not Found -> <NA>
+```
+
+```         
+Output
+<NA> <NA> <NA> <NA>
+Levels: male f
+```
+
+## **Relevel and reorder factor levels**
+
+**Changing the levels order** can be important, for instance, in some graphical representations. The factor levels order can be changed in various ways.
+
+### **Custom order of factor levels**
+
+In case you want create a custom order for the levels you will have to create a vector with the desired order and pass it to the `labels` argument.
+
+```{r Custom order of factor levels, warning=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=80)}
+
+# Create a vector with the desired order
+my_order <- c("Chiangmai", "Songkhla", "Khonkaen", "Bangkok")
+
+# cities_label = c(Songkhla  Chiangmai Bangkok   Khonkaen  Songkhla  Chiangmai)
+
+# Indicate the order in the 'levels' argument
+city_factor <- factor(cities_label , levels = my_order) # sort by level (but not changed)
+city_factor # same data but levels changed
+```
+
+```{r Example of bar plotting}
+barplot(table(city_factor))
+barplot(table(char_to_fac))
+```
+
+### **Reorder factor levels**
+
+The `reorder` function is designed to order the levels of a factor based on a statistical measure of other variable. To demonstrate, consider a data frame where each row represents an individual, the `city` column represents the city where it was born and the column `salary` represents its actual annual wage in thousands of dollars.
+
+```{r Reorder factor levels, warning=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=80)}
+
+set.seed(123) # fixed random numbers
+my_df <- data.frame(city = city_factor , salary = sample(20:50, 6)) # sample = random
+my_df
+
+# Reorder the factor based on the "mean wage" of the individuals using the reorder function
+levels(city_factor) # call levels
+
+city_reordered <- reorder( my_df $ "city" , my_df $ "salary" , mean) # reorder column 1 by mean column 2
+city_reordered  # levels ordered by value (Ascending)
+```
+
+### **Reverse order of levels**
+
+Recall that you can use the `levels` function to obtain the levels of a factor. With this in mind, you can reverse the order of levels of a factor with the `rev` function.
+
+```{r Reverse order of levels, warning=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=80)}
+
+levels(city_factor)
+city_factor_rev <- rev(levels(city_factor))
+
+# Reverse the order of levels of a factor with the "rev" function
+city_factor_rev # reverse value (Descending)
+
+city_reordered_reverse <- reorder( my_df $ "city" , my_df $ "salary" , mean , levels = city_factor_rev) # reorder column 1 by mean column 2
+city_reordered_reverse # levels ordered by value (Ascending)
+```
+
+### **Relevel function (เอาอันเเรกขึ้น ที่เหลือมั่ว)**
+
+Moreover, if you want to change just one observation and put it first you can use the `relevel` functio
+
+```{r Relevel function, warning=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=80)}
+
+# Let the level `Khonkaen` appearing first and maintain the order of the others
+city_factor_khonkean_first <- relevel(city_factor , "Khonkaen")
+
+# Check all created factors
+cities_label
+city_factor
+city_reordered
+city_reordered_reverse
+city_factor_khonkean_first
+## ALL 5 ANSWERS MUST SAME
+```
+
+## **Convert factor to numeric**
+
+If you have a factor that you want to convert to numeric, the most efficient way is using the `as.numeric` and `levels` functions for indexing the levels by the index of the corresponding factor.
+
+If you want to convert the factor to the original vector (with the same order) never use **`as.numeric(my_factor)`**, as it will return a numeric vector different than the desired.
+
+```{r Convert factor to numeric, warning=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=80)}
+
+my_data <- c(0, 2, 0, 5, 1, 9, 9, 4)
+my_factor <- factor(my_data)
+my_factor
+
+# Correct way!!
+as.numeric(levels(my_factor))[my_factor]
+# Wrong way!!
+as.numeric(my_factor)
+```
+
+End-of-File\
+Pongsun B.\
+2025-08-14
